@@ -1,0 +1,68 @@
+{
+  "name": "mean-template",
+  "version": "2.0.0",
+  "description": "A MEAN Stack (Mongo, Express, Angular, Node) simple application template",
+  "main": "server.js",
+  "scripts": {
+    "start": "ng build && node serve.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agonxgashi/MEAN-template.git"
+  },
+  "keywords": [
+    "mean",
+    "template",
+    "angular",
+    "node",
+    "express",
+    "simple",
+    "github"
+  ],
+  "author": "Agon <agonxgashi@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/agonxgashi/MEAN-template/issues"
+  },
+  "homepage": "https://github.com/agonxgashi/MEAN-template#readme",
+  "dependencies": {
+    "@angular/animations": "~9.0.2",
+    "@angular/common": "~9.0.2",
+    "@angular/compiler": "~9.0.2",
+    "@angular/core": "~9.0.2",
+    "@angular/forms": "~9.0.2",
+    "@angular/platform-browser": "~9.0.2",
+    "@angular/platform-browser-dynamic": "~9.0.2",
+    "@angular/router": "~9.0.2",
+    "bcryptjs": "^2.4.3",
+    "body-parse": "^0.1.0",
+    "express": "^4.17.1",
+    "googleapis": "^67.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.20",
+    "mongoose": "^5.0.16",
+    "node-cache": "^5.1.2",
+    "nodemailer": "^6.5.0",
+    "nodemon": "^2.0.7",
+    "path": "^0.12.7",
+    "rxjs": "~6.5.4",
+    "socket.io": "^3.1.0",
+    "socket.io-client": "^3.1.0",
+    "tslib": "^1.10.0",
+    "ws": "^7.4.2",
+    "xml2js": "^0.4.23",
+    "xmljson": "^0.2.0",
+    "zone.js": "~0.10.2"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~0.900.3",
+    "@angular/cli": "~9.0.3",
+    "@angular/compiler-cli": "~9.0.2",
+    "@angular/language-service": "~9.0.2",
+    "@types/node": "^12.11.1",
+    "ts-node": "~7.0.0",
+    "tslint": "~5.15.0",
+    "typescript": "~3.7.5"
+  }
+}
