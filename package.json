@@ -4,7 +4,7 @@
   "description": "A MEAN Stack (Mongo, Express, Angular, Node) simple application template",
   "main": "server.js",
   "scripts": {
-    "start": "ng build && node serve.js",
+    "start": "node serve.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -14,27 +14,11 @@
   "keywords": [
     "mean",
     "template",
-    "angular",
     "node",
-    "express",
-    "simple",
-    "github"
+    "express"
   ],
   "author": "Agon <agonxgashi@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/agonxgashi/MEAN-template/issues"
-  },
-  "homepage": "https://github.com/agonxgashi/MEAN-template#readme",
   "dependencies": {
-    "@angular/animations": "~9.0.2",
-    "@angular/common": "~9.0.2",
-    "@angular/compiler": "~9.0.2",
-    "@angular/core": "~9.0.2",
-    "@angular/forms": "~9.0.2",
-    "@angular/platform-browser": "~9.0.2",
-    "@angular/platform-browser-dynamic": "~9.0.2",
-    "@angular/router": "~9.0.2",
     "bcryptjs": "^2.4.3",
     "body-parse": "^0.1.0",
     "express": "^4.17.1",
@@ -54,15 +38,5 @@
     "xml2js": "^0.4.23",
     "xmljson": "^0.2.0",
     "zone.js": "~0.10.2"
-  },
-  "devDependencies": {
-    "@angular-devkit/build-angular": "~0.900.3",
-    "@angular/cli": "~9.0.3",
-    "@angular/compiler-cli": "~9.0.2",
-    "@angular/language-service": "~9.0.2",
-    "@types/node": "^12.11.1",
-    "ts-node": "~7.0.0",
-    "tslint": "~5.15.0",
-    "typescript": "~3.7.5"
   }
 }
