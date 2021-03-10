@@ -109,7 +109,10 @@ mongoose.connect(config.mongoConnectionString, (err) => {
 
 const Role = require('./src/models/role.model')
 const demoConfig = require('./src/services/plasma-configuration.service')
+
+const userService = require('./src/services/user.service')
 function initial() {
+    userService.saveTemplate();
   // Role.count((err, count) => {
   //   if (!err && count === 0) {
   //     new Role({
@@ -123,4 +126,6 @@ function initial() {
   //   }
   // });
   // demoConfig.saveTestModel();
+
+  
 }

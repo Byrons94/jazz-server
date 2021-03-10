@@ -93,3 +93,39 @@ function generateRandomString() {
   }
   return result;
 }
+
+exports.saveTemplate = () => {
+  User.count((err, count) => {
+    if (!err && count === 0) {
+      const tmpPwd = "test"; //generateRandomString();
+      const user = new User({
+        username: "test",
+        email: "test@test.com",
+        active: true,
+        password: bcrypt.hashSync(tmpPwd, 6)
+      });
+    
+      user.save((err, user) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+        Role.findOne({ name: "user" }, (err, role) => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+    
+          user.roles = [role._id];
+          user.save(err => {
+            if (err) {
+              res.status(500).send({ message: err });
+              return;
+            }
+            return user;
+          });
+        });
+      });
+    }
+  });
+}
