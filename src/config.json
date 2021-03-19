@@ -13,6 +13,6 @@
         "service": "gmail"
     },
     "socket": {
-        "notifyEvery": "180"
+        "notifyEvery": "60"
     }
 }   

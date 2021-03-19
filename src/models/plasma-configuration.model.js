@@ -37,6 +37,10 @@ let PlasmaConfigurationSchema = new Schema({
         type: String,
         required: true
     },
+    name: {
+        type: String,
+        required: true
+    },
     viewType: {
         type: String,
         enum: ['v', 'h'],
@@ -49,13 +53,15 @@ let PlasmaConfigurationSchema = new Schema({
         default: 'a',
         required: true
     },
+    viewTheme: {
+        type: String,
+        enum: ['l', 'd'], 
+        default: 'd',
+        required: true
+    },
     time: {
         type: String,
         required: true
-    },
-    imageUrl: {
-        type: String,
-        required: false
     },
     createdDate: {
         type: Date, 
@@ -64,6 +70,10 @@ let PlasmaConfigurationSchema = new Schema({
     active: {
         type: Boolean,
         required: true
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     },
     sections: [SectionSchema]
 });

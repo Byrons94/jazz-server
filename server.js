@@ -16,7 +16,11 @@ const lineController = require('./src/controllers/lines.controller');
 const app = express()
 
 var http = require('http').Server(app);
-var io = require('socket.io')(http,  {
+var io = require('socket.io')(http,  
+  {
+    path:'jazzsocket'
+  },
+  {
   cors: {
     origin: config.cors.origins,
     credentials: true
@@ -81,7 +85,7 @@ mongoose.connect(config.mongoConnectionString, (err) => {
               });
           }
         });
-      }, parseInt(config.socket.notifyEvery) * 1000);
+      }, 10000);
      
 
       socket.on('subscribe', function(room) { 
@@ -113,19 +117,28 @@ const demoConfig = require('./src/services/plasma-configuration.service')
 const userService = require('./src/services/user.service')
 function initial() {
     userService.saveTemplate();
-  // Role.count((err, count) => {
-  //   if (!err && count === 0) {
-  //     new Role({
-  //       name: "admin"
-  //     }).save(err => {
-  //       if (err) {
-  //         console.log("error", err);
-  //       }
-  //       console.log("added 'admin' to roles collection");
-  //     });
-  //   }
-  // });
-  // demoConfig.saveTestModel();
+  Role.count((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: "client"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+        console.log("added 'client' to roles collection");
+      });
+
+      new Role({
+        name: "admin"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+        console.log("added 'admin' to roles collection");
+      });
+    }
+  });
+  demoConfig.saveTestModel();
 
   
 }

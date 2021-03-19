@@ -14,6 +14,15 @@ exports.getAll = async (req, res) => {
   }
 };
 
+exports.getPassword = async (req, res) => {
+  try {
+    var response = await service.getUserPassword(req.params.id);
+    return res.status(200).json(response);
+  } catch (e) {
+    res.status(500).send({ message: 'Internal Server Error: ' + e.message })
+  }
+};
+
 exports.getByEmail = async (req, res) => {
   try {
     var user = null;

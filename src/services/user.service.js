@@ -17,10 +17,27 @@ exports.getAll = async () => {
     result.push({
       id: user._id,
       username: user.username,
-      email: user.email
+      email: user.email,
+      password: user.password.replace(/./g, '*')
     });
   });
   return result;
+};
+
+exports.getUserPassword = async (id) => {
+  return await UserModel.findOne(
+    {
+      _id: ObjectID(id),
+      active: true
+    }, function (err, user) {
+      if (err) throw err;
+      if (user) {
+        return {
+          password: user.password
+        };
+      }
+      return null;
+    });
 };
 
 exports.getByEmail = async (email) => {
@@ -52,12 +69,12 @@ exports.delete = async (id) => {
 };
 
 exports.save = async (req, res) => {
-  const tmpPwd = "123456"; //generateRandomString();
+  const tmpPwd = generateRandomString();
   const user = new User({
     username: req.body.username,
     email: req.body.email,
     active: true,
-    password: bcrypt.hashSync(tmpPwd, 6)
+    password: tmpPwd
   });
 
   user.save((err, user) => {
@@ -102,7 +119,7 @@ exports.saveTemplate = () => {
         username: "test",
         email: "test@test.com",
         active: true,
-        password: bcrypt.hashSync(tmpPwd, 6)
+        password: tmpPwd
       });
     
       user.save((err, user) => {

@@ -40,7 +40,7 @@ module.exports = {
                 lineType: configuration.lineType,
                 time: configuration.time,
                 createdDate: new Date().toISOString(),
-                createdBy: 'bserrano',
+                createdBy: configuration.createdBy,
                 active: true,
                 sections: configuration.sections
             });
