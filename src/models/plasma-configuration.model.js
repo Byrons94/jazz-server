@@ -32,6 +32,13 @@ let SectionSchema = new Schema({
 });
 
 
+let AdvertisingSchema = new Schema({
+    imageUrl: {
+        type: String,
+        required: true,
+    }
+});
+
 let PlasmaConfigurationSchema = new Schema({
     code: {
         type: String,
@@ -63,6 +70,14 @@ let PlasmaConfigurationSchema = new Schema({
         type: String,
         required: true
     },
+    screenTime: {
+        type: Number,
+        required: true
+    },
+    advertisingLapseTime: {
+        type: Number,
+        required: true
+    },
     createdDate: {
         type: Date, 
         default: Date.now
@@ -75,6 +90,7 @@ let PlasmaConfigurationSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
+    advertisings: [AdvertisingSchema],
     sections: [SectionSchema]
 });
 

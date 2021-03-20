@@ -1,6 +1,8 @@
 const { config } = require('rxjs');
 var PlasmaConfigurationModel = require('../models/plasma-configuration.model');
+var userService = require('./user.service');
 var ObjectID = require('mongodb').ObjectID;
+
 
 module.exports = {
     async saveTestModel() {
@@ -36,14 +38,20 @@ module.exports = {
             configuration.code = generateCode(6);
             var model = new PlasmaConfigurationModel({
                 code: configuration.code,
+                name: configuration.name,
                 viewType: configuration.viewType,
                 lineType: configuration.lineType,
+                viewTheme: configuration.viewTheme,
                 time: configuration.time,
                 createdDate: new Date().toISOString(),
-                createdBy: configuration.createdBy,
+                createdBy: ObjectID(configuration.createdBy),
                 active: true,
+                screenTime: configuration.screenTime,
+                advertisingLapseTime: configuration.advertisingLapseTime,
+                advertisings: configuration.advertisings,
                 sections: configuration.sections
             });
+
             model.save(function (err, obj) {
                 if (err) throw err;
                 return obj;
@@ -52,11 +60,16 @@ module.exports = {
             var model = PlasmaConfigurationModel.updateOne(
                 { code: configuration.code }, 
                 { 
+                    name: configuration.name,
                     viewType: configuration.viewType,
                     lineType: configuration.lineType,
+                    viewTheme: configuration.viewTheme,
                     time: configuration.time,
                     active: true,
-                    sections: configuration.sections 
+                    screenTime: configuration.screenTime,
+                    advertisingLapseTime: configuration.advertisingLapseTime,
+                    advertisings: configuration.advertisings,
+                    sections: configuration.sections
                 }, 
                 function (err, result) {
                 if (err) throw err;
@@ -79,14 +92,19 @@ function map(model) {
     if (model) {
         var entity = {
             id: model._id,
+            name: model.name,
             code: model.code,
             viewType: model.viewType,
             lineType: model.lineType,
+            viewTheme: model.viewTheme,
             time: model.time, 
-            imageUrl: model.imageUrl,
             createdDate: model.createdDate,
             active: model.active,
-            sections: model.sections
+            sections: model.sections,
+            advertisings: model.advertisings,
+            createdBy: '',
+            screenTime: model.screenTime,
+            advertisingLapseTime: model.advertisingLapseTime
         };
         return entity;
     }

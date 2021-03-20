@@ -18,11 +18,13 @@ exports.getAll = async () => {
       id: user._id,
       username: user.username,
       email: user.email,
-      password: user.password.replace(/./g, '*')
+      password: user.password 
     });
   });
   return result;
 };
+
+
 
 exports.getUserPassword = async (id) => {
   return await UserModel.findOne(
@@ -39,6 +41,24 @@ exports.getUserPassword = async (id) => {
       return null;
     });
 };
+
+exports.getById = async (id) => {
+  return await UserModel.findOne(
+    {
+      _id: ObjectID(id)
+    }, function (err, user) {
+      if (err) throw err;
+      if (user) {
+        return {
+          id: user._id,
+          username: user.username,
+          email: user.email
+        };
+      }
+      return null;
+    });
+};
+
 
 exports.getByEmail = async (email) => {
    return await UserModel.findOne(
