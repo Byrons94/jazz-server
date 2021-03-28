@@ -72,7 +72,6 @@ mongoose.connect(config.mongoConnectionString, (err) => {
             if (rooms.length > 0) {
               rooms.forEach(function (room) {
                 var roomName = room.sport + ':' + room.division;
-                console.log('roomName' + roomName);
                 scheduleController.getSchedulesByRoomName(roomName).then(function (result) {
                   io.to(roomName).emit('onListen', JSON.stringify(result));
                 });
@@ -80,7 +79,7 @@ mongoose.connect(config.mongoConnectionString, (err) => {
             }
           });
         });
-      }, parseInt(config.socket.notifyEvery));
+      }, 10000);
 
       socket.on('subscribe', function (room) {
         console.log('joining room', room);

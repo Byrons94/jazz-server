@@ -7,9 +7,9 @@ const config = require('../config.json')
 module.exports = {
     async getSchedulesByRoomName(roomName) {
         var schedules = [];
-        var schedulesCache = [ ...JSON.parse(getChachedData('schedules')) ];
+        var schedulesCache = [...JSON.parse(getChachedData('schedules')) ];
         if (schedulesCache) {
-            if(roomName == 'all:all') {
+            if(roomName === 'all:all') {
                 schedules = getSchedulesWithNextEventsOnly(schedulesCache);
             } else {
                 var schedule = getScheduleByRoomName(roomName, schedulesCache);
@@ -53,7 +53,7 @@ function getChachedData(key) {
 }
 
 function getScheduleByRoomName(roomName, schedules) {
-    return schedules.find(x => _.isEqual((x.sport + ":" + x.division), roomName));
+    return schedules.find(x => roomName === (x.sport + ":" + x.division));
 }
 
 function getSchedulesWithNextEventsOnly(schedules) {
