@@ -7,12 +7,14 @@
             "http://localhost:4201"
         ]
     },
-    "notifications": {
-        "email": "",
-        "pwd": "",
-        "service": "gmail"
+    "defaultTime": {
+        "value": "-8",
+        "gmtAdjustment": "GMT-08:00"
+    },
+    "nextEventsLimit": {
+       "value": "1440"
     },
     "socket": {
-        "notifyEvery": "60"
+        "notifyEvery": "10000" 
     }
 }   

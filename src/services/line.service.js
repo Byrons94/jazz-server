@@ -37,6 +37,8 @@ function getRooms(scheduleList) {
             var room = new Room(schedule.$.sport, schedule.$.division, true, false);
             rooms.push(room);
         });
+        var allRoom = new Room('all', 'all', true, false);
+        rooms.push(allRoom)
     }
     if (rooms.length > 0) {
         rooms = _.uniqWith(rooms, _.isEqual);

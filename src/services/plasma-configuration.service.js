@@ -46,6 +46,7 @@ module.exports = {
                 createdDate: new Date().toISOString(),
                 createdBy: ObjectID(configuration.createdBy),
                 active: true,
+                showOnlyNextEvents: configuration.showOnlyNextEvents,
                 screenTime: configuration.screenTime,
                 advertisingLapseTime: configuration.advertisingLapseTime,
                 advertisings: configuration.advertisings,
@@ -66,6 +67,7 @@ module.exports = {
                     viewTheme: configuration.viewTheme,
                     time: configuration.time,
                     active: true,
+                    showOnlyNextEvents: configuration.showOnlyNextEvents,
                     screenTime: configuration.screenTime,
                     advertisingLapseTime: configuration.advertisingLapseTime,
                     advertisings: configuration.advertisings,
@@ -103,6 +105,7 @@ function map(model) {
             sections: model.sections,
             advertisings: model.advertisings,
             createdBy: '',
+            showOnlyNextEvents: model.showOnlyNextEvents,
             screenTime: model.screenTime,
             advertisingLapseTime: model.advertisingLapseTime
         };

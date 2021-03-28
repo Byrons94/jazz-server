@@ -16,25 +16,20 @@ const lineController = require('./src/controllers/lines.controller');
 const app = express()
 
 var http = require('http').Server(app);
-var io = require('socket.io')(http,  
+var io = require('socket.io')(http,
   {
-    path:'jazzsocket'
-  },
-  {
-  cors: {
-    origin: config.cors.origins,
-    credentials: true
-  }
-}); 
+    cors: {
+      origin: config.cors.origins,
+      credentials: true
+    }
+  });
 
 var corsOptions = {
   origin: config.cors.origins,
   optionsSuccessStatus: 200 // For legacy browser support
 }
 
-
 const mongoose = require('mongoose');
-const { count } = require('./src/models/user.model');
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
@@ -52,7 +47,7 @@ mongoose.connect(config.mongoConnectionString, (err) => {
   } else { // If there is no error during db connection, continue proccess 
 
     app.use(express.static(path.join(__dirname, 'dist')))
- 
+
     app.use(cors(corsOptions));
 
     app.use('/', function (req, res, next) {
@@ -60,8 +55,8 @@ mongoose.connect(config.mongoConnectionString, (err) => {
       next();
     });
 
-    app.use('/api', require('./src/routes/routes'));
     // routes
+    app.use('/api', require('./src/routes/routes'));
     require('./src/routes/auth.routes')(app);
     require('./src/routes/user.routes')(app);
 
@@ -70,32 +65,31 @@ mongoose.connect(config.mongoConnectionString, (err) => {
       res.sendFile(path.join(__dirname, 'index.html'));
     });
 
-  
-    lineController.load();
     io.on('connection', async (socket) => {
-      //TEMPORAL, verificar si hay alguien escuchando por room para enviar mensaje
-      setInterval(function() {
-        configController.getRooms().then(function (rooms) {
-          if (rooms.length > 0) {
+      setInterval(function () {
+        lineController.load().then(function () {
+          configController.getRooms().then(function (rooms) {
+            if (rooms.length > 0) {
               rooms.forEach(function (room) {
                 var roomName = room.sport + ':' + room.division;
+                console.log('roomName' + roomName);
                 scheduleController.getSchedulesByRoomName(roomName).then(function (result) {
                   io.to(roomName).emit('onListen', JSON.stringify(result));
                 });
               });
-          }
+            }
+          });
         });
-      }, 10000);
-     
+      }, parseInt(config.socket.notifyEvery));
 
-      socket.on('subscribe', function(room) { 
+      socket.on('subscribe', function (room) {
         console.log('joining room', room);
-        socket.join(room); 
+        socket.join(room);
       });
-      
-      socket.on('unsubscribe', function(room) {  
-          console.log('leaving room', room);
-          socket.leave(room); 
+
+      socket.on('unsubscribe', function (room) {
+        console.log('leaving room', room);
+        socket.leave(room);
       });
     })
 
@@ -105,7 +99,6 @@ mongoose.connect(config.mongoConnectionString, (err) => {
     var server = http.listen(3000, () => {
       console.log('server is running on port', server.address().port);
     });
-
     //testing
     initial();
   }
@@ -116,7 +109,7 @@ const demoConfig = require('./src/services/plasma-configuration.service')
 
 const userService = require('./src/services/user.service')
 function initial() {
-    userService.saveTemplate();
+  userService.saveTemplate();
   Role.count((err, count) => {
     if (!err && count === 0) {
       new Role({
@@ -140,5 +133,5 @@ function initial() {
   });
   demoConfig.saveTestModel();
 
-  
+
 }

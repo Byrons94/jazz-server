@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const controller = require('../controllers/config.controller');
 const lineContronller = require('../controllers/lines.controller');
 const configController = require('../controllers/configuration.controller');
 const sportController = require('../controllers/sport.controller');
+const scheduleController = require('../controllers/schedule.controller');
 
 // • declaring routes
 router.get('/loadLines', lineContronller.loadLines);
@@ -12,6 +12,10 @@ router.get('/loadLines', lineContronller.loadLines);
 router.post('/configuration/', configController.save);
 router.get('/configuration/:code', (req, res) => {
   return configController.get(req, res);
+});
+
+router.get('/configuration/:code/schedules', (req, res) => {
+  return scheduleController.getSchedulesByConfigurationCode(req, res);
 });
 
 router.get('/configuration/', (req, res) => {

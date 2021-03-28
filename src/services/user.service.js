@@ -12,13 +12,13 @@ exports.getAll = async () => {
   var users = await UserModel.find({active: true}, function (err, users) {
     if (err) throw err;
     return users;
-  });
+  }); 
   users.forEach(function (user) {
     result.push({
       id: user._id,
       username: user.username,
       email: user.email,
-      password: user.password 
+      password: user.password.replace(/./g, '*').slice(0,6) 
     });
   });
   return result;
@@ -102,7 +102,7 @@ exports.save = async (req, res) => {
       res.status(500).send({ message: err });
       return;
     }
-    Role.findOne({ name: "user" }, (err, role) => {
+    Role.findOne({ name: req.body.roles[0].name }, (err, role) => {
       if (err) {
         res.status(500).send({ message: err });
         return;
