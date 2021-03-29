@@ -1,11 +1,11 @@
 var UserModel = require('../models/user.model');
 const db = require("../models");
-var bcrypt = require("bcryptjs");
-const mailService = require('./mail.service');
 var ObjectID = require('mongodb').ObjectID;
-
 const User = db.user;
 const Role = db.role;
+// var bcrypt = require("bcryptjs");
+// const mailService = require('./mail.service');
+
 
 exports.getAll = async () => {
   var result = [];
@@ -24,8 +24,6 @@ exports.getAll = async () => {
   return result;
 };
 
-
-
 exports.getUserPassword = async (id) => {
   return await UserModel.findOne(
     {
@@ -43,20 +41,19 @@ exports.getUserPassword = async (id) => {
 };
 
 exports.getById = async (id) => {
-  return await UserModel.findOne(
-    {
-      _id: ObjectID(id)
-    }, function (err, user) {
+  return await UserModel.findOne({ _id: ObjectID(id) })
+    .populate("roles")
+    .then(function(user, err) {
       if (err) throw err;
       if (user) {
         return {
           id: user._id,
           username: user.username,
-          email: user.email
+          email: user.email,
+          roles: user.roles
         };
       }
-      return null;
-    });
+     });
 };
 
 

@@ -12,9 +12,9 @@
         "gmtAdjustment": "GMT-08:00"
     },
     "nextEventsLimit": {
-       "value": "1440"
+       "value": "30"
     },
     "socket": {
-        "notifyEvery": "10000" 
+        "notifyEvery": "300000" 
     }
 }   

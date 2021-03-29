@@ -14,7 +14,6 @@ module.exports = function(app) {
   app.post("/api/users", controller.save);
   app.delete("/api/users/:id", controller.delete);
   app.get("/api/users/byEmail/:email", controller.getByEmail); 
-  app.get("/api/users/id", [authJwt.verifyToken], controller.userBoard);
   app.get("/api/users/getpwd/:id", controller.getPassword);
 
 };

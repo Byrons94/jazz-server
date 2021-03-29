@@ -7,14 +7,18 @@ const config = require('../config.json')
 module.exports = {
     async getSchedulesByRoomName(roomName) {
         var schedules = [];
-        var schedulesCache = [...JSON.parse(getChachedData('schedules')) ];
+        var schedulesCache = [];
+        var cachedData = getChachedData('schedules');
+        if (cachedData != null) {
+            schedulesCache = [...JSON.parse(cachedData) ];
+        }
         if (schedulesCache) {
             if(roomName === 'all:all') {
                 schedules = getSchedulesWithNextEventsOnly(schedulesCache);
             } else {
-                var schedule = getScheduleByRoomName(roomName, schedulesCache);
-                if (schedule) {
-                    schedules.push(schedule);
+                var schedulesByRoomName = getScheduleRoomName(roomName, schedulesCache);
+                if (schedulesByRoomName && schedulesByRoomName.length > 0) {
+                    schedules = schedules.concat(schedulesByRoomName);
                 }
             }
         }
@@ -22,26 +26,32 @@ module.exports = {
     },
     async getByConfigurationCode(code) {
         var schedules = [];
-        var schedulesCache = [ ...JSON.parse(getChachedData('schedules')) ];
-        plasmaConfig.get(code).then(function (configuration) {
-            if (configuration.showOnlyNextEvents) {
-                schedules = getSchedulesWithNextEventsOnly(schedulesCache);
-            } else {
-                var roomNames = []; 
-                configuration.sections.forEach(function(section) {
-                    if (section.events) {
-                        section.events.forEach(function(event) { 
-                            var roomName = event.sport + ':' + event.division;
-                            roomNames.push(roomName);
-                        });
-                    }
-                });
-                roomNames.forEach(function(roomName){
-                    var schedule = getScheduleByRoomName(roomName, schedulesCache);
-                    if (schedule) {
-                        schedules.push(schedule);
-                    }
-                });
+        var schedulesCache = [];
+        var cachedData = getChachedData('schedules');
+        if (cachedData != null) {
+            schedulesCache = [...JSON.parse(cachedData) ];
+        }
+        await plasmaConfig.get(code).then(function (configuration) {
+            if (configuration) {
+                if (configuration.showOnlyNextEvents) {
+                    schedules = getSchedulesWithNextEventsOnly(schedulesCache);
+                } else {
+                    var roomNames = []; 
+                    configuration.sections.forEach(function(section) {
+                        if (section.events) {
+                            section.events.forEach(function(event) { 
+                                var roomName = event.sport + ':' + event.division;
+                                roomNames.push(roomName);
+                            });
+                        }
+                    });
+                    roomNames.forEach(function(roomName){
+                        var schedulesByRoomName = getScheduleRoomName(roomName, schedulesCache);
+                        if (schedulesByRoomName && schedulesByRoomName.length > 0) {
+                            schedules = schedules.concat(schedulesByRoomName);
+                        }
+                    });
+                }
             }
         });
         return schedules;
@@ -49,11 +59,12 @@ module.exports = {
 };
 
 function getChachedData(key) {
-    return cacheManager.get('schedules');
+    var cachedData = cacheManager.get('schedules')
+    return cachedData ? cachedData: null;
 }
 
-function getScheduleByRoomName(roomName, schedules) {
-    return schedules.find(x => roomName === (x.sport + ":" + x.division));
+function getScheduleRoomName(roomName, schedules) {
+    return schedules.filter(x => roomName === (x.sport + ":" + x.division));
 }
 
 function getSchedulesWithNextEventsOnly(schedules) {
@@ -62,7 +73,6 @@ function getSchedulesWithNextEventsOnly(schedules) {
     var currentUTCDate = dateUtil.getCurrentUtcDateTime(); 
     var currentUtcLimit = dateUtil.getCurrentUtcDateTime();
     currentUtcLimit.setUTCMinutes(currentUtcLimit.getUTCMinutes() + nextEventsLimitTime);
-
     schedules.forEach(schedule => {
         if (schedule.games) {
             var futureGames = [];

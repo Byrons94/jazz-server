@@ -64,6 +64,7 @@ mongoose.connect(config.mongoConnectionString, (err) => {
       console.log(req.url)
       res.sendFile(path.join(__dirname, 'index.html'));
     });
+    lineController.load();
 
     io.on('connection', async (socket) => {
       setInterval(function () {
@@ -79,7 +80,7 @@ mongoose.connect(config.mongoConnectionString, (err) => {
             }
           });
         });
-      }, 10000);
+      }, parseInt(config.socket.notifyEvery));
 
       socket.on('subscribe', function (room) {
         console.log('joining room', room);
@@ -98,7 +99,7 @@ mongoose.connect(config.mongoConnectionString, (err) => {
     var server = http.listen(3000, () => {
       console.log('server is running on port', server.address().port);
     });
-    //testing
+    
     initial();
   }
 })
@@ -109,17 +110,9 @@ const demoConfig = require('./src/services/plasma-configuration.service')
 const userService = require('./src/services/user.service')
 function initial() {
   userService.saveTemplate();
-  Role.count((err, count) => {
-    if (!err && count === 0) {
-      new Role({
-        name: "client"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-        console.log("added 'client' to roles collection");
-      });
-
+  Role.find({}, function(error, roles) {
+    var roleAdmin = roles.find(x => x.name == 'admin');
+    if (roleAdmin == undefined) {
       new Role({
         name: "admin"
       }).save(err => {
@@ -129,8 +122,20 @@ function initial() {
         console.log("added 'admin' to roles collection");
       });
     }
-  });
-  demoConfig.saveTestModel();
 
+    var roleClient = roles.find(x => x.name == 'client');
+    if (roleClient == undefined) {
+      new Role({
+        name: "client"
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+        console.log("added 'client' to roles collection");
+      });
+    }
+  });
+
+  demoConfig.saveTestModel();
 
 }

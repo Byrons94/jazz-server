@@ -1,10 +1,5 @@
 var service = require('../services/user.service');
 
-
-exports.userBoard = (req, res) => {
-  res.status(200).send("User Content.");
-};
-
 exports.getAll = async (req, res) => {
   try {
     var response = await service.getAll();

@@ -9,19 +9,43 @@ module.exports = {
         saveNewModel();
         return true;
     },
-    async getAll() {
-        var configModels = await PlasmaConfigurationModel.find({active: true}, function (err, result) {
-            if (err) throw err;
-            return result;
-        });
+    async getAllByUserIdRol(userId) {
         var configurations = [];
-        configModels.forEach(function (config) {
-            configurations.push(map(config));
-        });
+        if (userId) {
+            var user = await userService.getById(userId);
+            var isAdmin = user.roles.find(x => x.name === 'admin') != null;
+           if (isAdmin) {
+                var configModels = await PlasmaConfigurationModel
+                .find({ active: true })
+                .populate("createdBy")
+                .then(function (result, err) {
+                    if (err) throw err;
+                    return result;
+                });
+                configModels.forEach(function (config) {
+                    configurations.push(map(config));
+                });
+           } else {
+                var configModels = await PlasmaConfigurationModel
+                .find({ 
+                        active: true,
+                        createdBy: ObjectID(userId)
+                     })
+                .populate("createdBy")
+                .then(function (result, err) {
+                    if (err) throw err;
+                    return result;
+                });
+
+                configModels.forEach(function (config) {
+                    configurations.push(map(config));
+                });
+           }
+        }
         return configurations;
     },
     async get(configurationCode) {
-        var configModel =  await PlasmaConfigurationModel.findOne({ code: configurationCode, active: true }, function (err, result) {
+        var configModel = await PlasmaConfigurationModel.findOne({ code: configurationCode, active: true }, function (err, result) {
             if (err) throw err;
             return result;
         });
@@ -59,8 +83,8 @@ module.exports = {
             });
         } else {
             var model = PlasmaConfigurationModel.updateOne(
-                { code: configuration.code }, 
-                { 
+                { code: configuration.code },
+                {
                     name: configuration.name,
                     viewType: configuration.viewType,
                     lineType: configuration.lineType,
@@ -72,11 +96,11 @@ module.exports = {
                     advertisingLapseTime: configuration.advertisingLapseTime,
                     advertisings: configuration.advertisings,
                     sections: configuration.sections
-                }, 
+                },
                 function (err, result) {
-                if (err) throw err;
-                return result;
-            });
+                    if (err) throw err;
+                    return result;
+                });
         }
     },
     async delete(id) {
@@ -99,15 +123,16 @@ function map(model) {
             viewType: model.viewType,
             lineType: model.lineType,
             viewTheme: model.viewTheme,
-            time: model.time, 
+            time: model.time,
             createdDate: model.createdDate,
             active: model.active,
             sections: model.sections,
             advertisings: model.advertisings,
-            createdBy: '',
+            createdBy: model.createdBy.username,
             showOnlyNextEvents: model.showOnlyNextEvents,
             screenTime: model.screenTime,
-            advertisingLapseTime: model.advertisingLapseTime
+            advertisingLapseTime: model.advertisingLapseTime,
+            user: model.User
         };
         return entity;
     }

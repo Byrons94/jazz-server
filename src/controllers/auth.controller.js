@@ -30,15 +30,13 @@ exports.signup = (req, res) => {
             res.status(500).send({ message: err });
             return;
           }
-
           user.roles = roles.map(role => role._id);
           user.save(err => {
             if (err) {
               res.status(500).send({ message: err });
               return;
             }
-
-            res.send({ message: "User was registered successfully!" });
+            res.send({ message: "Usuario registrado correctamente" });
           });
         }
       );
@@ -56,7 +54,7 @@ exports.signup = (req, res) => {
             return;
           }
 
-          res.send({ message: "User was registered successfully!" });
+          res.send({ message: "Usuario registrado correctamente" });
         });
       });
     }
@@ -75,18 +73,20 @@ exports.signin = (req, res) => {
       }
 
       if (!user) {
-        return res.status(404).send({ message: "Incorrect email or password" });
+        return res.status(404).send({ message: "Credenciales inválidos" });
       }
 
-      var passwordIsValid = bcrypt.compareSync(
-        req.body.password,
-        user.password
-      );
+      // var passwordIsValid = bcrypt.compareSync(
+      //   req.body.password,
+      //   user.password
+      // );
+
+      var passwordIsValid = (req.body.password === user.password);
 
       if (!passwordIsValid) {
         return res.status(401).send({
           accessToken: null,
-          message: "Incorrect email or password"
+          message: "Credenciales inválidos"
         });
       }
 

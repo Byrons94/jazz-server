@@ -10,7 +10,7 @@ module.exports = {
     },
     async getAll(req, res) {
         try {
-            var response = await service.getAll();
+            var response = await service.getAllByUserIdRol(req.params.userid);
             return res.status(200).json(response);
         } catch (e) {
             res.status(500).send({ message: 'Internal Server Error: ' + e.message })

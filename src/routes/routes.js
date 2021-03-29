@@ -13,12 +13,12 @@ router.post('/configuration/', configController.save);
 router.get('/configuration/:code', (req, res) => {
   return configController.get(req, res);
 });
-
+  
 router.get('/configuration/:code/schedules', (req, res) => {
   return scheduleController.getSchedulesByConfigurationCode(req, res);
 });
 
-router.get('/configuration/', (req, res) => {
+router.get('/configuration/user/:userid', (req, res) => {
   return configController.getAll(req, res);
 });
 

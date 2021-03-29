@@ -12,7 +12,7 @@ module.exports = {
     },
     async getSchedulesByConfigurationCode(req, res) {
         try {
-            var response = await service.getByConfigurationCode(req.body.code);
+            var response = await service.getByConfigurationCode(req.params.code);
             return res.status(200).json(response);
         } catch (e) {
             throw e;
