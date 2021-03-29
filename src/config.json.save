@@ -3,7 +3,7 @@
     "mongoConnectionString": "mongodb://localhost/jazz-lines",
     "cors": {
         "origins": [
-            "http://localhost:4200",
+            "h",
             "http://localhost:4201"
         ]
     },
@@ -13,6 +13,6 @@
         "service": "gmail"
     },
     "socket": {
-        "notifyEvery": "60"
+        "notifyEvery": "180"
     }
 }   
