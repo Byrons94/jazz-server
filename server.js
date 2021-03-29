@@ -109,7 +109,7 @@ const demoConfig = require('./src/services/plasma-configuration.service')
 
 const userService = require('./src/services/user.service')
 function initial() {
-  userService.saveTemplate();
+  
   Role.find({}, function(error, roles) {
     var roleAdmin = roles.find(x => x.name == 'admin');
     if (roleAdmin == undefined) {
@@ -134,6 +134,8 @@ function initial() {
         console.log("added 'client' to roles collection");
       });
     }
+
+    userService.saveTemplate();
   });
 
   demoConfig.saveTestModel();

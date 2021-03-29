@@ -131,10 +131,10 @@ function generateRandomString() {
 exports.saveTemplate = () => {
   User.count((err, count) => {
     if (!err && count === 0) {
-      const tmpPwd = "test"; //generateRandomString();
+      const tmpPwd = "12346"; 
       const user = new User({
-        username: "test",
-        email: "test@test.com",
+        username: "admin",
+        email: "admin@admin.com",
         active: true,
         password: tmpPwd
       });
@@ -144,7 +144,7 @@ exports.saveTemplate = () => {
           res.status(500).send({ message: err });
           return;
         }
-        Role.findOne({ name: "user" }, (err, role) => {
+        Role.findOne({ name: "admin" }, (err, role) => {
           if (err) {
             res.status(500).send({ message: err });
             return;
