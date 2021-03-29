@@ -116,6 +116,7 @@ module.exports = {
 
 function map(model) {
     if (model) {
+        var userName = (model.createdBy)  ? model.createdBy.username : "";
         var entity = {
             id: model._id,
             name: model.name,
@@ -128,7 +129,7 @@ function map(model) {
             active: model.active,
             sections: model.sections,
             advertisings: model.advertisings,
-            createdBy: model.createdBy.username,
+            createdBy: userName,
             showOnlyNextEvents: model.showOnlyNextEvents,
             screenTime: model.screenTime,
             advertisingLapseTime: model.advertisingLapseTime,
