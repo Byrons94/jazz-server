@@ -64,24 +64,15 @@ mongoose.connect(config.mongoConnectionString, (err) => {
       console.log(req.url)
       res.sendFile(path.join(__dirname, 'index.html'));
     });
+    
+    //initial load
     lineController.load();
+    setInterval(function () {
+        reloadLinesAndNotify();
+    }, parseInt(config.socket.notifyEvery));
+
 
     io.on('connection', async (socket) => {
-      setInterval(function () {
-        lineController.load().then(function () {
-          configController.getRooms().then(function (rooms) {
-            if (rooms.length > 0) {
-              rooms.forEach(function (room) {
-                var roomName = room.sport + ':' + room.division;
-                scheduleController.getSchedulesByRoomName(roomName).then(function (result) {
-                  io.to(roomName).emit('onListen', JSON.stringify(result));
-                });
-              });
-            }
-          });
-        });
-      }, parseInt(config.socket.notifyEvery));
-
       socket.on('subscribe', function (room) {
         console.log('joining room', room);
         socket.join(room);
@@ -104,12 +95,27 @@ mongoose.connect(config.mongoConnectionString, (err) => {
   }
 })
 
+
+function reloadLinesAndNotify() {
+  lineController.load().then(function () {
+    configController.getRooms().then(function (rooms) {
+      if (rooms.length > 0) {
+        rooms.forEach(function (room) {
+          var roomName = room.sport + ':' + room.division;
+          scheduleController.getSchedulesByRoomName(roomName).then(function (result) {
+            io.to(roomName).emit('onListen', JSON.stringify(result));
+          });
+        });
+      }
+    });
+  });
+}
+
 const Role = require('./src/models/role.model')
 const demoConfig = require('./src/services/plasma-configuration.service')
 
 const userService = require('./src/services/user.service')
 function initial() {
-  
   Role.find({}, function(error, roles) {
     var roleAdmin = roles.find(x => x.name == 'admin');
     if (roleAdmin == undefined) {

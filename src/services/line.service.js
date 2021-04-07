@@ -12,7 +12,7 @@ const Total = require('../cache/data/total.model');
 module.exports = {
     async loadLines() {
         return XmlClient.get(config.jazzsportsFeedUrl).then(response => {
-            setDataInCache(response);
+            setDataInCacheAndGet(response);
             return cacheManager.get('schedules');
         })
         .catch(error => {
@@ -21,13 +21,20 @@ module.exports = {
     },
 };
 
-function setDataInCache(xmlAsJson) {
+function setDataInCacheAndGet(xmlAsJson) {
     if (xmlAsJson && xmlAsJson.odds[0].schedule) {
         var rooms = getRooms(xmlAsJson.odds[0].schedule);
         var schedules = getSchedules(xmlAsJson.odds[0].schedule);
+        cacheManager.delete('rooms');
+        cacheManager.delete('schedules');
+        console.log('reloading lines');
+        console.log(cacheManager.get('schedules'))
         cacheManager.set('rooms', JSON.stringify(rooms));
         cacheManager.set('schedules', JSON.stringify(schedules));
+        console.log(cacheManager.get('schedules').length)
+        return cacheManager.get('schedules');
     }
+    return null;
 }
 
 function getRooms(scheduleList) {
