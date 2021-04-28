@@ -119,19 +119,20 @@ exports.save = async (req, res) => {
 };
 
 function generateRandomString() {
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for ( var i = 0; i < 6; i++ ) {
-     result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
+  return "123456";
+  // var result           = '';
+  // var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  // var charactersLength = characters.length;
+  // for ( var i = 0; i < 6; i++ ) {
+  //    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  // }
+  // return result;
 }
 
 exports.saveTemplate = () => {
   User.count((err, count) => {
     if (!err && count === 0) {
-      const tmpPwd = "12346"; 
+      const tmpPwd = "123456"; 
       const user = new User({
         username: "admin",
         email: "admin@admin.com",
