@@ -127,7 +127,7 @@ function initial() {
         }
         console.log("added 'admin' to roles collection");
       });
-    }
+    } 
 
     var roleClient = roles.find(x => x.name == 'client');
     if (roleClient == undefined) {
@@ -143,7 +143,4 @@ function initial() {
 
     userService.saveTemplate();
   });
-
-  demoConfig.saveTestModel();
-
 }
