@@ -4,7 +4,11 @@
     "cors": {
         "origins": [
             "http://localhost:4200",
-            "http://localhost:4201"
+            "http://localhost:4201",
+            "https://display.jazzgs.com/*",
+            "https://display.jazzdeportes.com/*",
+            "https://admindisplay.jazzgs.com/*",
+            "https://admindisplay.jazzdeportes.com/*"
         ]
     },
     "defaultTime": {
