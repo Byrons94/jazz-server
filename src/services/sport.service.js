@@ -4,11 +4,15 @@ const _ = require('lodash');
 module.exports = {
     async getSportsAsTree() {
         var sports = [];
-        var data = JSON.parse(getChachedData('schedules'));
-        if (data) {
-            sports = getSports(data);
+        var cached = getChachedData('schedules');
+        if (cached) {
+            var data = JSON.parse();
+            if (data) {
+                sports = getSports(data);
+            }
+            return sports;
         }
-        return sports;
+        return [];
     }
 };
 
