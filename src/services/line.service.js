@@ -22,6 +22,7 @@ module.exports = {
 };
 
 function setDataInCacheAndGet(xmlAsJson) {
+    console.log(xmlAsJson);
     if (xmlAsJson && xmlAsJson.odds[0].schedule) {
         var rooms = getRooms(xmlAsJson.odds[0].schedule);
         var schedules = getSchedules(xmlAsJson.odds[0].schedule);
